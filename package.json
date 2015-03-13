@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "watch": "watchify -t reactify -t babelify index.js -o dist/bundle.js"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.4",
+    "reactify": "^1.1.0",
+    "watchify": "^2.4.0",
+    "browserify": "^6.3.0"
+  },
+  "dependencies": {
+    "react": "^0.12.2"
+  }
+}
