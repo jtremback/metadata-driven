@@ -3,12 +3,35 @@
 // Use
 // var React = require('./react');
 // instead if you are loading React externally, via a <script> element
-var React = require('react');
+var React = require('react')
+var Kendo = require('react-kendo')
 
-var App = React.createClass({
-  render: function() {
-    return <h3>goodbyewassadfasdfa World!</h3>;
+/**
+ * Instead of, e.g.
+ * $('#my-splitter').kendoSplitter(splitterOptions);
+ *
+ */
+
+var splitterOptions = {
+  orientation: 'horizontal',
+  panes: [
+    { collapsible: false, size: '300px' },
+    { resizable: true }
+  ]
+};
+
+var treeOptions = { /* ... */ }
+var gridOptions = { /* ... */ }
+
+var Workstation = React.createClass({
+  render: function () {
+    return (
+      <Kendo.Splitter className="content" options={splitterOptions}>
+        <Kendo.TreeView options={treeOptions} />
+        <Kendo.Grid options={gridOptions} />
+      </Kendo.Splitter>
+    )
   }
-});
+})
 
-React.renderComponent(<App />, document.body);
+React.render(<Workstation />, document.body)
