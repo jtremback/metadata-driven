@@ -10,8 +10,9 @@
   "dependencies": {
     "d3": "^3.5.5",
     "lodash": "^3.5.0",
-    "pusher-client": "^0.2.3",
-    "react": "^0.12.2",
-    "react-d3-components": "^0.4.6"
+    "react": "^0.13.1",
+    "react-chartist": "^0.4.0",
+    "react-d3-components": "^0.4.6",
+    "whatwg-fetch": "^0.7.0"
   }
 }
