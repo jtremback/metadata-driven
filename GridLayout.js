@@ -50,7 +50,8 @@ class GridLayout extends React.Component {
 
   onLayoutChange (layout) {
     console.log('layout changed', layout)
-    // this.props.onLayoutChange(layout) // updates status display
+    // debugger
+    this.forceUpdate()
     this.setState({ layout: layout })
   }
 
@@ -69,10 +70,7 @@ class GridLayout extends React.Component {
               layout={this.state.layout}
               onLayoutChange={this.onLayoutChange}>
             <div key={1} _grid={{w: 1, h: 1, x: 0, y: 0}}><QuandlGraph height={200} /></div>
-            <div key={2} _grid={{w: 1, h: 1, x: 2, y: 0}}><span className='text'>2</span></div>
-            <div key={3} _grid={{w: 1, h: 1, x: 4, y: 0}}><span className='text'>3</span></div>
-            <div key={4} _grid={{w: 1, h: 1, x: 6, y: 0}}><span className='text'>4</span></div>
-            <div key={5} _grid={{w: 1, h: 1, x: 8, y: 0}}><span className='text'>5</span></div>
+            <div key={2} _grid={{w: 1, h: 1, x: 2, y: 0}}><QuandlGraph height={200} /></div>
           </ReactGridLayout>
         </div>
       )

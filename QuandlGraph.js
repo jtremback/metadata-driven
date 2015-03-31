@@ -37,6 +37,10 @@ class QuandlGraph extends React.Component {
 
   }
 
+  componentDidUpdate (prevProps, prevState) {
+    console.log('componentDidUpdate', prevProps, prevState)
+  }
+
   render () {
     if (this.state) {
       return (
