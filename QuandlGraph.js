@@ -9,9 +9,9 @@ function parseQuandlTimeSeries (input) {
     series: [[]]
   }
 
-  input.forEach((a) => {
-    output.labels.unshift(a[0])
-    output.series[0].unshift(a[1])
+  input.forEach(item => {
+    output.labels.unshift(item[0])
+    output.series[0].unshift(item[1])
   })
 
   return (output)
@@ -34,7 +34,6 @@ class QuandlGraph extends React.Component {
 
       this.setState({ data: values, height: 400 })
     })
-
   }
 
   componentDidUpdate (prevProps, prevState) {

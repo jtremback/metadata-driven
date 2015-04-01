@@ -34,11 +34,11 @@ class GridLayout extends React.Component {
     this.onBreakpointChange = this.onBreakpointChange.bind(this)
     this.state = {
       items: items,
-      newCounter: items[items.length - 1]
+      newCounter: items.length - 1
     }
   }
 
-  createElement(el) {
+  createElement (el) {
     var removeStyle = {
       position: 'absolute',
       right: '2px',
@@ -49,49 +49,52 @@ class GridLayout extends React.Component {
     return (
       <div key={el.layout.i} _grid={el.layout}>
         <QuandlGraph height={el.layout.h * 100} />
-        <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, el.layout.i)}>{el.text}</span>
+        <span className="remove"
+          style={removeStyle}
+          onClick={this.onRemoveItem.bind(this, el.layout.i)}
+        >{el.text}</span>
       </div>
     )
   }
 
-  onAddItem() {
-    console.log('adding', 'n' + this.state.newCounter)
-    this.setState({
-      // Add a new item. It must have a unique key!
-      items: this.state.items.concat({
-        i: 'n' + this.state.newCounter,
+  onAddItem () {
+    var newItem = {
+      text: 'n',
+      layout: {
+        i: this.state.newCounter + 1,
         x: this.state.items.length * 2 % (this.state.cols || 12),
         y: Infinity, // puts it at the bottom
         w: 2,
         h: 2
-      }),
-      // Increment the counter to ensure key is always unique.
-      newCounter: this.state.newCounter + 1
-    })
+      }
+    }
+
+    this.setState(React.addons.update(this.state, {
+      items: { $push: [newItem] }
+    }))
   }
 
   // We're using the cols coming back from this to calculate where to add new items.
-  onBreakpointChange(breakpoint, cols) {
+  onBreakpointChange (breakpoint, cols) {
     this.setState({
       breakpoint: breakpoint,
       cols: cols
     })
   }
 
-  onLayoutChange(layout) {
+  onLayoutChange (layout) {
     this.setState(state => {
       return {
         items: state.items.map((item, i) => React.addons.update(item, { layout: { $set: layout[i] }}))
       }
-    }, err => console.log(err, JSON.stringify(this.state.items)))
+    })
   }
 
-  onRemoveItem(i) {
-    console.log('removing', i)
+  onRemoveItem (i) {
     this.setState({ items: _.reject(this.state.items, { i: i }) })
   }
 
-  render() {
+  render () {
     return (
       <div>
         <button onClick={this.onAddItem}>Add Item</button>
@@ -100,7 +103,7 @@ class GridLayout extends React.Component {
           onBreakpointChange={this.onBreakpointChange}
           {...this.props}
         >
-          {_.map(this.state.items, this.createElement)}
+          { _.map(this.state.items, this.createElement) }
         </ResponsiveReactGridLayout>
       </div>
     )

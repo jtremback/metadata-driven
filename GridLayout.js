@@ -12,7 +12,7 @@ class GridLayout extends React.Component {
     this.onLayoutChange = this.onLayoutChange.bind(this)
   }
 
-  mixins: [PureRenderMixin]
+  // mixins: [PureRenderMixin]
 
   getDefaultProps () {
     return {
