@@ -9,7 +9,7 @@ import QuandlGraph from './QuandlGraph.js'
 class GridLayout extends React.Component {
   constructor () {
     super()
-    this.onLayoutChange = this.onLayoutChange.bind(this);
+    this.onLayoutChange = this.onLayoutChange.bind(this)
   }
 
   mixins: [PureRenderMixin]

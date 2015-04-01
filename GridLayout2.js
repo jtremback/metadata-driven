@@ -22,23 +22,21 @@ var items = [
 /**
  * This layout demonstrates how to use a grid with a dynamic number of elements.
  */
-var AddRemoveLayout = React.createClass({
-  mixins: [PureRenderMixin],
+class GridLayout extends React.Component {
+  mixins: [PureRenderMixin]
 
-  getDefaultProps() {
-    return {
-      className: "layout",
-      cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-      rowHeight: 100
-    }
-  },
-
-  getInitialState() {
-    return {
+  constructor () {
+    super()
+    this.onLayoutChange = this.onLayoutChange.bind(this)
+    this.onAddItem = this.onAddItem.bind(this)
+    this.createElement = this.createElement.bind(this)
+    this.onRemoveItem = this.onRemoveItem.bind(this)
+    this.onBreakpointChange = this.onBreakpointChange.bind(this)
+    this.state = {
       items: items,
       newCounter: items[items.length - 1]
     }
-  },
+  }
 
   createElement(el) {
     var removeStyle = {
@@ -54,7 +52,7 @@ var AddRemoveLayout = React.createClass({
         <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, el.layout.i)}>{el.text}</span>
       </div>
     )
-  },
+  }
 
   onAddItem() {
     console.log('adding', 'n' + this.state.newCounter)
@@ -70,7 +68,7 @@ var AddRemoveLayout = React.createClass({
       // Increment the counter to ensure key is always unique.
       newCounter: this.state.newCounter + 1
     })
-  },
+  }
 
   // We're using the cols coming back from this to calculate where to add new items.
   onBreakpointChange(breakpoint, cols) {
@@ -78,7 +76,7 @@ var AddRemoveLayout = React.createClass({
       breakpoint: breakpoint,
       cols: cols
     })
-  },
+  }
 
   onLayoutChange(layout) {
     this.setState(state => {
@@ -86,12 +84,12 @@ var AddRemoveLayout = React.createClass({
         items: state.items.map((item, i) => React.addons.update(item, { layout: { $set: layout[i] }}))
       }
     }, err => console.log(err, JSON.stringify(this.state.items)))
-  },
+  }
 
   onRemoveItem(i) {
     console.log('removing', i)
     this.setState({ items: _.reject(this.state.items, { i: i }) })
-  },
+  }
 
   render() {
     return (
@@ -107,6 +105,12 @@ var AddRemoveLayout = React.createClass({
       </div>
     )
   }
-})
+}
 
-module.exports = AddRemoveLayout
+GridLayout.defaultProps = {
+  className: 'layout',
+  cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
+  rowHeight: 100
+}
+
+module.exports = GridLayout
