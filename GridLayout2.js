@@ -1,4 +1,4 @@
-var React = require('react')
+var React = require('react/addons')
 var PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin')
 var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
@@ -6,15 +6,15 @@ import QuandlGraph from './QuandlGraph.js'
 
 var items = [
   {
-    layout: { i: 0, x: 0, y: 0, w: 2, h: 2 },
+    layout: { i: '0', x: 0, y: 0, w: 2, h: 2 },
     text: 'x'
   },
   {
-    layout: { i: 1, x: 2, y: 0, w: 2, h: 2 },
+    layout: { i: '1', x: 2, y: 0, w: 2, h: 2 },
     text: 'c'
   },
   {
-    layout: { i: 2, x: 4, y: 0, w: 2, h: 3 },
+    layout: { i: '2', x: 4, y: 0, w: 2, h: 3 },
     text: 'p'
   }
 ]
@@ -28,7 +28,7 @@ var AddRemoveLayout = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 12, md: 10, sm: 6, xs: 4, xxs: 2},
+      cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
       rowHeight: 100
     }
   },
@@ -36,7 +36,7 @@ var AddRemoveLayout = React.createClass({
   getInitialState() {
     return {
       items: items,
-      newCounter: 0
+      newCounter: items[items.length - 1]
     }
   },
 
@@ -47,11 +47,11 @@ var AddRemoveLayout = React.createClass({
       top: 0,
       cursor: 'pointer'
     }
-    var i = el.i
+
     return (
       <div key={el.layout.i} _grid={el.layout}>
         <QuandlGraph height={el.layout.h * 100} />
-        <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, i)}>{el.text}</span>
+        <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, el.layout.i)}>{el.text}</span>
       </div>
     )
   },
@@ -81,13 +81,16 @@ var AddRemoveLayout = React.createClass({
   },
 
   onLayoutChange(layout) {
-    // this.props.onLayoutChange(layout)
-    this.setState({layout: layout})
+    this.setState(state => {
+      return {
+        items: state.items.map((item, i) => React.addons.update(item, { layout: { $set: layout[i] }}))
+      }
+    }, err => console.log(err, JSON.stringify(this.state.items)))
   },
 
   onRemoveItem(i) {
     console.log('removing', i)
-    this.setState({items: _.reject(this.state.items, {i: i})})
+    this.setState({ items: _.reject(this.state.items, { i: i }) })
   },
 
   render() {
