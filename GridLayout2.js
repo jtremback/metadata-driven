@@ -4,26 +4,9 @@ var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
 import QuandlGraph from './QuandlGraph.js'
 
-var items = [
-  {
-    layout: { i: '0', x: 0, y: 0, w: 2, h: 2 },
-    text: 'x'
-  },
-  {
-    layout: { i: '1', x: 2, y: 0, w: 2, h: 2 },
-    text: 'c'
-  },
-  {
-    layout: { i: '2', x: 4, y: 0, w: 2, h: 3 },
-    text: 'p'
-  }
-]
 
-/**
- * This layout demonstrates how to use a grid with a dynamic number of elements.
- */
 class GridLayout extends React.Component {
-  mixins: [PureRenderMixin]
+  mixins: [ PureRenderMixin ]
 
   constructor () {
     super()
@@ -32,9 +15,9 @@ class GridLayout extends React.Component {
     this.createElement = this.createElement.bind(this)
     this.onRemoveItem = this.onRemoveItem.bind(this)
     this.onBreakpointChange = this.onBreakpointChange.bind(this)
+    this.saveToLocalStorage = this.saveToLocalStorage.bind(this)
     this.state = {
-      items: items,
-      newCounter: items.length - 1
+      items: []
     }
   }
 
@@ -61,7 +44,7 @@ class GridLayout extends React.Component {
     var newItem = {
       text: 'n',
       layout: {
-        i: this.state.newCounter + 1,
+        i: Math.floor(Math.random() * 1e15),
         x: this.state.items.length * 2 % (this.state.cols || 12),
         y: Infinity, // puts it at the bottom
         w: 2,
@@ -74,6 +57,24 @@ class GridLayout extends React.Component {
     }))
   }
 
+  componentDidMount () {
+    var ls = {}
+    if (global.localStorage) {
+      try {
+        ls = JSON.parse(global.localStorage.getItem('metadata-driven')) || {}
+      } catch(e) {}
+    }
+    this.setState({ items: ls.items || [] })
+  }
+
+  saveToLocalStorage () {
+    if (global.localStorage) {
+      global.localStorage.setItem('metadata-driven', JSON.stringify({
+        items: this.state.items
+      }))
+    }
+  }
+
   // We're using the cols coming back from this to calculate where to add new items.
   onBreakpointChange (breakpoint, cols) {
     this.setState({
@@ -83,11 +84,11 @@ class GridLayout extends React.Component {
   }
 
   onLayoutChange (layout) {
-    this.setState(state => {
-      return {
-        items: state.items.map((item, i) => React.addons.update(item, { layout: { $set: layout[i] }}))
-      }
+    let items = this.state.items.map((item, i) => React.addons.update(item, { layout: { $set: layout[i] }}))
+    this.setState({
+      items: items
     })
+    // debugger
   }
 
   onRemoveItem (i) {
@@ -98,6 +99,7 @@ class GridLayout extends React.Component {
     return (
       <div>
         <button onClick={this.onAddItem}>Add Item</button>
+        <button onClick={this.saveToLocalStorage}>Save to Local Storage</button>
         <ResponsiveReactGridLayout
           onLayoutChange={this.onLayoutChange}
           onBreakpointChange={this.onBreakpointChange}
