@@ -2,11 +2,14 @@ var React = require('react/addons')
 var PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin')
 var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
+import EditModal from './EditModal.js'
 import QuandlGraph from './QuandlGraph.js'
+import Panel from 'react-bootstrap/lib/Panel'
 
+const rowHeight = 100
 
 class GridLayout extends React.Component {
-  mixins: [ PureRenderMixin ]
+  // mixins: [ PureRenderMixin ]
 
   constructor () {
     super()
@@ -22,21 +25,13 @@ class GridLayout extends React.Component {
   }
 
   createElement (el) {
-    var removeStyle = {
-      position: 'absolute',
-      right: '2px',
-      top: 0,
-      cursor: 'pointer'
-    }
-
     return (
-      <div key={el.layout.i} _grid={el.layout}>
-        <QuandlGraph height={el.layout.h * 100} />
+      <Panel key={el.layout.i} _grid={el.layout}>
+        <QuandlGraph height={el.layout.h * rowHeight - 50} />
         <span className="remove"
-          style={removeStyle}
           onClick={this.onRemoveItem.bind(this, el.layout.i)}
         >{el.text}</span>
-      </div>
+      </Panel>
     )
   }
 
@@ -88,7 +83,6 @@ class GridLayout extends React.Component {
     this.setState({
       items: items
     })
-    // debugger
   }
 
   onRemoveItem (i) {
@@ -98,6 +92,7 @@ class GridLayout extends React.Component {
   render () {
     return (
       <div>
+        <EditModal />
         <button onClick={this.onAddItem}>Add Item</button>
         <button onClick={this.saveToLocalStorage}>Save to Local Storage</button>
         <ResponsiveReactGridLayout
@@ -114,8 +109,8 @@ class GridLayout extends React.Component {
 
 GridLayout.defaultProps = {
   className: 'layout',
-  cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-  rowHeight: 100
+  cols: { lg: 4, md: 4, sm: 4, xs: 4, xxs: 4 },
+  rowHeight: rowHeight
 }
 
-module.exports = GridLayout
+export default GridLayout

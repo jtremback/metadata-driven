@@ -1,16 +1,18 @@
 {
   "scripts": {
-    "watch": "mkdir -p dist & watchify -dv -t babelify index.js -o dist/bundle.js"
+    "watch": "mkdir -p dist & watchify -dv -t babelify index.js -o dist/bundle.js & stylus --include-css --include node_modules/bootstrap-styl/bootstrap -u autoprefixer-stylus -w -o dist/ & http-server . -p 4256 > /dev/null"
   },
   "devDependencies": {
+    "autoprefixer-stylus": "^0.5.0",
     "babelify": "^5.0.4",
-    "watchify": "^2.4.0",
-    "browserify": "^6.3.0"
+    "browserify": "^6.3.0",
+    "watchify": "^2.4.0"
   },
   "dependencies": {
     "d3": "^3.5.5",
     "lodash": "^3.5.0",
     "react": "^0.13.1",
+    "react-bootstrap": "^0.20.0",
     "react-chartist": "^0.4.0",
     "react-grid-layout": "^0.8.0",
     "reactify": "^1.1.0",

@@ -10,11 +10,22 @@ function parseQuandlTimeSeries (input) {
   }
 
   input.forEach(item => {
-    output.labels.unshift(item[0])
+    output.labels.unshift(decorateQuandlDate(item[0]))
     output.series[0].unshift(item[1])
   })
 
   return (output)
+}
+
+function decorateQuandlDate (date) {
+  date = date.match(/(\d{4})-(\d{2})-(\d{2})/)
+  const year = date[1]
+  const month = date[2]
+  const day = date[3]
+  return `
+<div class="quandl-month-day">${month}/${day}</div>
+<div class="quandl-year">${year}</div>
+`
 }
 
 class QuandlGraph extends React.Component {
@@ -43,13 +54,16 @@ class QuandlGraph extends React.Component {
   render () {
     if (this.state) {
       return (
-        <Chartist data={this.state.data} options={{
-          fullWidth: true,
-          height: this.props.height,
-          chartPadding: {
-            right: 40
-          }
-        }} type={'Line'} />
+        <div>
+          <Chartist data={this.state.data} options={{
+            fullWidth: true,
+            height: this.props.height,
+            chartPadding: {
+              right: 40,
+              top: 10
+            }
+          }} type={'Line'} />
+        </div>
       )
     } else {
       return <div>Loading...</div>
