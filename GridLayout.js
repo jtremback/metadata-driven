@@ -2,11 +2,10 @@ var React = require('react/addons')
 var PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin')
 var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
-import EditModal from './EditModal.js'
 import QuandlGraph from './QuandlGraph.js'
 import Panel from 'react-bootstrap/lib/Panel'
 
-const rowHeight = 100
+const rowHeight = 200
 
 class GridLayout extends React.Component {
   // mixins: [ PureRenderMixin ]
@@ -92,7 +91,6 @@ class GridLayout extends React.Component {
   render () {
     return (
       <div>
-        <EditModal />
         <button onClick={this.onAddItem}>Add Item</button>
         <button onClick={this.saveToLocalStorage}>Save to Local Storage</button>
         <ResponsiveReactGridLayout

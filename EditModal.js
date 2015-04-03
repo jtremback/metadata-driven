@@ -1,38 +1,21 @@
 import React from 'react/addons'
 import Button from 'react-bootstrap/lib/Button'
 import Modal from 'react-bootstrap/lib/Modal'
-import OverlayMixin from 'react-bootstrap/lib/OverlayMixin'
-
-var Portal = React.createClass({
-  render: () => null,
-  portalElement: null,
-  componentDidMount() {
-    var p = this.props.portalId && document.getElementById(this.props.portalId);
-    if (!p) {
-      var p = document.createElement('div');
-      p.id = this.props.portalId;
-      document.body.appendChild(p);
-    }
-    this.portalElement = p;
-    this.componentDidUpdate();
-  },
-  componentWillUnmount() {
-    document.body.removeChild(this.portalElement);
-  },
-  componentDidUpdate() {
-    React.render(<div {...this.props}>{this.props.children}</div>, this.portalElement);
-  }
-});
+import Glyphicon from 'react-bootstrap/lib/Glyphicon'
+import Input from 'react-bootstrap/lib/Input'
+import Portal from './Portal.js'
+import Chartist from 'react-chartist'
 
 class EditModal extends React.Component {
-  mixins: [OverlayMixin]
-
   constructor () {
     super()
     this.handleToggle = this.handleToggle.bind(this)
-    this.renderOverlay = this.renderOverlay.bind(this)
+    this.renderInPortal = this.renderInPortal.bind(this)
+    this.handleChange = this.handleChange.bind(this)
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
+      rows: 10,
+      code: 'OPEC/ORB'
     }
   }
 
@@ -44,27 +27,44 @@ class EditModal extends React.Component {
 
   render() {
     return (
-      <div>
-        <Portal portalId={'foo'}>{this.renderOverlay()}</Portal>
-        <Button onClick={this.handleToggle} bsStyle='primary'>Lancuh</Button>
+      <div ref='jehan'>
+        <Portal portalId={'foo'}>{this.renderInPortal()}</Portal>
+        <Glyphicon className='launchEditModal' onClick={this.handleToggle} glyph='chevron-right' />
       </div>
     )
   }
 
-  // This is called by the `OverlayMixin` when this component
-  // is mounted or updated and the return value is appended to the body.
-  renderOverlay() {
+  handleChange (ref) {
+    return () => {
+      this.setState({
+        [ref]: this.refs[ref] ? this.refs[ref].getValue() : ''
+      })
+    }
+  }
+
+  renderInPortal() {
     if (!this.state.isModalOpen) {
       return <span/>
     }
 
     return (
-      <Modal bsStyle='primary' title='Modal heading' onRequestHide={this.handleToggle}>
+      <Modal {...this.props} bsStyle='default' onRequestHide={this.handleToggle}>
         <div className='modal-body'>
-          This modal is controlled by our custom trigger component.
-        </div>
-        <div className='modal-footer'>
-          <Button onClick={this.handleToggle}>Close</Button>
+          <Chartist data={this.props.data} options={{
+            fullWidth: true,
+            height: 300,
+            chartPadding: {
+              right: 40,
+              top: 10
+            }
+          }} type={'Line'} />
+          <form>
+            <Input ref='rows' value={this.state.rows} type='number' label='Rows' onChange={this.handleChange('rows')} />
+            <Input ref='code' value={this.state.code} type='select' label='Resource Code' onChange={this.handleChange('code')} >
+              <option value='OPEC/ORB'>OPEC/ORB</option>
+              <option value='BAVERAGE/ANX_HKUSD'>BAVERAGE/ANX_HKUSD</option>
+            </Input>
+          </form>
         </div>
       </Modal>
     )

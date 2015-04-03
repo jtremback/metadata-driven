@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import Chartist from 'react-chartist'
 import 'whatwg-fetch'
+import EditModal from './EditModal.js'
 
 function parseQuandlTimeSeries (input) {
   let output = {
@@ -47,14 +48,16 @@ class QuandlGraph extends React.Component {
     })
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    console.log('componentDidUpdate', prevProps, prevState)
+  componentDidUpdate (prevProps) {
+    console.log('prevProps', prevProps)
+    console.log('this.props', this.props, '\n')
   }
 
   render () {
     if (this.state) {
       return (
-        <div>
+        <div className='quandle-graph'>
+          <EditModal data={this.state.data} />
           <Chartist data={this.state.data} options={{
             fullWidth: true,
             height: this.props.height,
