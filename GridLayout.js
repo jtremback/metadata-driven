@@ -19,14 +19,18 @@ class GridLayout extends React.Component {
     this.onBreakpointChange = this.onBreakpointChange.bind(this)
     this.saveToLocalStorage = this.saveToLocalStorage.bind(this)
     this.state = {
-      items: []
+      items: [],
+      api: { code: 'OPEC/ORB', rows: 10 }
     }
+
+    setTimeout(() => { this.setState({ api: { code: 'OPEC/ORB', rows: 4 }}) }, 1000)
+    setTimeout(() => { this.setState({ api: { code: 'OPEC/ORB', rows: 20 }}) }, 2000)
   }
 
   createElement (el) {
     return (
       <Panel key={el.layout.i} _grid={el.layout}>
-        <QuandlGraph height={el.layout.h * rowHeight - 50} />
+        <QuandlGraph height={el.layout.h * rowHeight - 50} api={this.state.api}/>
         <span className="remove"
           onClick={this.onRemoveItem.bind(this, el.layout.i)}
         >{el.text}</span>
