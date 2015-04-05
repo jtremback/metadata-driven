@@ -2,7 +2,7 @@ var React = require('react/addons')
 var PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin')
 var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
-import QuandlGraph from './QuandlGraph.js'
+import Graph from './Graph.js'
 import Panel from 'react-bootstrap/lib/Panel'
 
 const rowHeight = 200
@@ -18,19 +18,16 @@ class GridLayout extends React.Component {
     this.onRemoveItem = this.onRemoveItem.bind(this)
     this.onBreakpointChange = this.onBreakpointChange.bind(this)
     this.saveToLocalStorage = this.saveToLocalStorage.bind(this)
+    this.modifyItem = this.modifyItem.bind(this)
     this.state = {
-      items: [],
-      api: { code: 'OPEC/ORB', rows: 10 }
+      items: []
     }
-
-    setTimeout(() => { this.setState({ api: { code: 'OPEC/ORB', rows: 4 }}) }, 1000)
-    setTimeout(() => { this.setState({ api: { code: 'OPEC/ORB', rows: 20 }}) }, 2000)
   }
 
   createElement (el) {
     return (
       <Panel key={el.layout.i} _grid={el.layout}>
-        <QuandlGraph height={el.layout.h * rowHeight - 50} api={this.state.api}/>
+        <Graph height={el.layout.h * rowHeight - 50} params={el.params} settingsDidChange={this.modifyItem}/>
         <span className="remove"
           onClick={this.onRemoveItem.bind(this, el.layout.i)}
         >{el.text}</span>
@@ -41,6 +38,7 @@ class GridLayout extends React.Component {
   onAddItem () {
     var newItem = {
       text: 'n',
+      params: { code: 'OPEC/ORB', rows: 10 },
       layout: {
         i: Math.floor(Math.random() * 1e15),
         x: this.state.items.length * 2 % (this.state.cols || 12),
@@ -63,6 +61,17 @@ class GridLayout extends React.Component {
       } catch(e) {}
     }
     this.setState({ items: ls.items || [] })
+  }
+
+  modifyItem (nextItem) {
+    this.setState({ items:
+      this.state.items.map((prevItem) => {
+        if (prevItem.layout.i === nextItem.layout.i) {
+          return nextItem
+        }
+        return prevItem
+      })
+    })
   }
 
   saveToLocalStorage () {

@@ -1,5 +1,5 @@
 import React from 'react/addons'
-import QuandlGraph from './QuandlGraph.js'
+import GraphView from './GraphView.js'
 import GridLayout2 from './GridLayout.js'
 
 window.onload = function () {
