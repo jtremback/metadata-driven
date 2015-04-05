@@ -35,7 +35,8 @@ class GraphView extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!_.isEqual(this.props.params, nextProps.params)) {
+    if (!_.isEqual(this.props.params, nextProps.params) &&
+    nextProps.params.rows > 1) {
       this.fetchData(nextProps.params)
     }
   }

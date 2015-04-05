@@ -4,6 +4,7 @@ var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
 import Graph from './Graph.js'
 import Panel from 'react-bootstrap/lib/Panel'
+import Glyphicon from 'react-bootstrap/lib/Glyphicon'
 
 const rowHeight = 200
 
@@ -27,10 +28,20 @@ class GridLayout extends React.Component {
   createElement (el) {
     return (
       <Panel key={el.layout.i} _grid={el.layout}>
-        <Graph height={el.layout.h * rowHeight - 50} params={el.params} settingsDidChange={this.modifyItem}/>
-        <span className="remove"
+        <Graph
+          height={el.layout.h * rowHeight - 50}
+          params={el.params}
+          settingsDidChange={this.modifyItem(el.layout.i)}
+        />
+        <Glyphicon
+          glyph='remove'
+          className='graph-remove'
           onClick={this.onRemoveItem.bind(this, el.layout.i)}
-        >{el.text}</span>
+        />
+        <Glyphicon
+          glyph='chevron-right'
+          className='graph-resize'
+        />
       </Panel>
     )
   }
@@ -63,15 +74,18 @@ class GridLayout extends React.Component {
     this.setState({ items: ls.items || [] })
   }
 
-  modifyItem (nextItem) {
-    this.setState({ items:
-      this.state.items.map((prevItem) => {
-        if (prevItem.layout.i === nextItem.layout.i) {
-          return nextItem
-        }
-        return prevItem
+  modifyItem (i) {
+    return (params) => {
+      this.setState({ items:
+        this.state.items.map((item) => {
+          if (item.layout.i === i) {
+            item.params = params
+            return item
+          }
+          return item
+        })
       })
-    })
+    }
   }
 
   saveToLocalStorage () {
@@ -109,6 +123,7 @@ class GridLayout extends React.Component {
         <ResponsiveReactGridLayout
           onLayoutChange={this.onLayoutChange}
           onBreakpointChange={this.onBreakpointChange}
+          draggableHandle={'graph-resize'}
           {...this.props}
         >
           { _.map(this.state.items, this.createElement) }

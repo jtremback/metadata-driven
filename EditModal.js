@@ -41,7 +41,7 @@ class EditModal extends React.Component {
   handleChange (ref) {
     return () => {
       let params = React.addons.update(this.state.params, {
-        [ref]: { $set: this.refs[ref] ? this.refs[ref].getValue() : '' }
+        [ref]: { $set: this.refs[ref] && this.refs[ref].getValue() }
       })
       this.setState({
         params: params
@@ -50,7 +50,8 @@ class EditModal extends React.Component {
   }
 
   saveChanges () {
-    this.props.settingsDidChange(this.state)
+    this.props.settingsDidChange(this.state && this.state.params)
+    this.handleToggle()
   }
 
   renderInPortal () {
@@ -58,10 +59,25 @@ class EditModal extends React.Component {
       return (
         <Modal {...this.props} bsStyle='default' onRequestHide={this.handleToggle}>
           <div className='modal-body'>
-            <GraphView params={this.state.params}/>
+            <GraphView params={this.state.params} height={300}/>
             <form>
-              <Input ref='rows' value={this.state.params.rows} type='number' label='Rows' onChange={this.handleChange('rows')} />
-              <Input ref='code' value={this.state.params.code} type='select' label='Resource Code' onChange={this.handleChange('code')} >
+              <Input
+                ref='rows'
+                value={this.state.params.rows}
+                bsStyle={(this.state.params.rows > 1) ?
+                  '' : 'error'
+                }
+                type='number'
+                label='Rows'
+                onChange={this.handleChange('rows')}
+              />
+              <Input
+                ref='code'
+                value={this.state.params.code}
+                type='select'
+                label='Resource Code'
+                onChange={this.handleChange('code')}
+              >
                 <option value='OPEC/ORB'>OPEC/ORB</option>
                 <option value='BAVERAGE/ANX_HKUSD'>BAVERAGE/ANX_HKUSD</option>
               </Input>
