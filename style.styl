@@ -2,6 +2,7 @@
 
 .graph-remove
   position: absolute
+  z-index 2
   right: 5px
   top: 5px
   cursor: pointer
@@ -15,6 +16,13 @@
   bottom: 3px
   color: $gray
   cursor: se-resize
+
+.launchEditModal
+  position absolute
+  z-index 2
+  top 5px
+  left 5px
+  color: $gray
 
 .react-resizable
   position: relative
@@ -33,14 +41,30 @@
   box-sizing: border-box
   cursor: se-resize
 
-
-
 .quandl-month-day, .ct-chart .ct-label.ct-vertical
   font-size: 10px
   color: black
 
-.launchEditModal
+.x-axis-label
   position absolute
-  top 5px
-  left 5px
-  color: $gray
+  bottom 0
+  left 0
+  right 0
+  color $gray-light
+  text-align center
+  font-size 10px
+
+.y-axis-label
+  position absolute
+  left -5px
+  top 45%
+  color $gray-light
+  transform rotate(90deg)
+  font-size 10px
+
+.graph-title-label
+  position absolute
+  top 0
+  left 0
+  right 0
+  text-align center

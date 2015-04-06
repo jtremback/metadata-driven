@@ -52,22 +52,31 @@ class GraphView extends React.Component {
         return response.json()
     })
     .then((response) => {
-      const values = parseQuandlTimeSeries(response.data)
-      this.setState({ data: values })
+      this.setState({
+        data: parseQuandlTimeSeries(response.data),
+        yAxisLabel: response.column_names[1],
+        xAxisLabel: response.column_names[0],
+        chartTitle: response.name
+      })
     })
   }
 
   render () {
     if (this.state) {
       return (
-        <Chartist data={this.state.data} options={{
-          fullWidth: true,
-          height: this.props.height,
-          chartPadding: {
-            right: 40,
-            top: 10
-          }
-        }} type={'Line'} />
+        <div>
+          <Chartist data={this.state.data} options={{
+            fullWidth: true,
+            height: this.props.height,
+            chartPadding: {
+              right: 40,
+              top: 10
+            }
+          }} type={'Line'} />
+          <div className='graph-title-label'>{this.state.chartTitle}</div>
+          <div className='x-axis-label'>{this.state.xAxisLabel}</div>
+          <div className='y-axis-label'>{this.state.yAxisLabel}</div>
+        </div>
       )
     } else {
       return <div>Loading...</div>

@@ -28,11 +28,6 @@ class GridLayout extends React.Component {
   createElement (el) {
     return (
       <Panel key={el.layout.i} _grid={el.layout}>
-        <Graph
-          height={el.layout.h * rowHeight - 50}
-          params={el.params}
-          settingsDidChange={this.modifyItem(el.layout.i)}
-        />
         <Glyphicon
           glyph='remove'
           className='graph-remove'
@@ -41,6 +36,11 @@ class GridLayout extends React.Component {
         <Glyphicon
           glyph='chevron-right'
           className='graph-resize'
+        />
+        <Graph
+          height={el.layout.h * rowHeight - 50}
+          params={el.params}
+          settingsDidChange={this.modifyItem(el.layout.i)}
         />
       </Panel>
     )
@@ -123,7 +123,7 @@ class GridLayout extends React.Component {
         <ResponsiveReactGridLayout
           onLayoutChange={this.onLayoutChange}
           onBreakpointChange={this.onBreakpointChange}
-          draggableHandle={'graph-resize'}
+          // draggableHandle={'graph-resize'}
           {...this.props}
         >
           { _.map(this.state.items, this.createElement) }
