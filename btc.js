@@ -1,0 +1,21 @@
+export default [
+  ['OPEC/ORB', 'OPEC Crude Oil Price'],
+  ['BAVERAGE/USD', 'USD/BITCOIN Weighted Price'],
+  ['BCHAIN/NADDU', 'Bitcoin Number of Unique Bitcoin Addresses Used'],
+  ['BCHAIN/MKTCP', 'Bitcoin Market Capitalization'],
+  ['BCHAIN/ETRAV', 'Bitcoin Estimated Transaction Volume'],
+  ['BCHAIN/ETRVU', 'Bitcoin Estimated Transaction Volume USD'],
+  ['BCHAIN/TRVOU', 'Bitcoin USD Exchange Trade Volume'],
+  ['BCHAIN/NTRAN', 'Bitcoin Number of Transactions'],
+  ['BCHAIN/NTRBL', 'Bitcoin Number of Transaction per Block'],
+  ['BCHAIN/ATRCT', 'Bitcoin Average Transaction Confirmation Time'],
+  ['BCHAIN/TRFEE', 'Bitcoin Total Transaction Fees'],
+  ['BCHAIN/TRFUS', 'Bitcoin Total Transaction Fees USD'],
+  ['BCHAIN/CPTRA', 'Bitcoin Cost Per Transaction'],
+  ['BCHAIN/TVTVR', 'Bitcoin Trade Volume vs Transaction Volume Ratio'],
+  ['BCHAIN/BLCHS', 'Bitcoin Blockchain Size'],
+  ['BCHAIN/AVBLS', 'Bitcoin Average Block Size'],
+  ['BCHAIN/TOUTV', 'Bitcoin Total Output Volume'],
+  ['BCHAIN/HRATE', 'Bitcoin Hash Rate'],
+  ['BCHAIN/MIREV', 'Bitcoin Miners Revenue']
+]
