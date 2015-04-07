@@ -17,7 +17,7 @@ function cull (fraction, array) {
       counter = 0
       return item
     }
-    return ' '
+    return ''
   })
 }
 
@@ -104,6 +104,9 @@ class GraphView extends React.Component {
           <Chartist data={React.addons.update(this.state.data, { labels: { $set: labels }})} options={{
             fullWidth: true,
             height: this.props.height,
+            showArea: true,
+            showLine: false,
+            showPoint: false,
             chartPadding: {
               right: 40,
               top: 10
