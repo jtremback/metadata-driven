@@ -1,11 +1,15 @@
 import React from 'react/addons'
 import GraphView from './GraphView.js'
 import Button from 'react-bootstrap/lib/Button'
+import Grid from 'react-bootstrap/lib/Grid'
+import Row from 'react-bootstrap/lib/Row'
+import Col from 'react-bootstrap/lib/Col'
 import Modal from 'react-bootstrap/lib/Modal'
 import Glyphicon from 'react-bootstrap/lib/Glyphicon'
 import Input from 'react-bootstrap/lib/Input'
 import Portal from './Portal.js'
 import Chartist from 'react-chartist'
+import wsj from './wsj.js'
 
 class EditModal extends React.Component {
   constructor () {
@@ -40,11 +44,10 @@ class EditModal extends React.Component {
 
   handleChange (ref) {
     return () => {
-      let params = React.addons.update(this.state.params, {
-        [ref]: { $set: this.refs[ref] && this.refs[ref].getValue() }
-      })
       this.setState({
-        params: params
+        params: React.addons.update(this.state.params, {
+          [ref]: { $set: this.refs[ref] && this.refs[ref].getValue() }
+        })
       })
     }
   }
@@ -68,18 +71,17 @@ class EditModal extends React.Component {
                   '' : 'error'
                 }
                 type='number'
-                label='Rows'
+                label='Days Back'
                 onChange={this.handleChange('rows')}
               />
               <Input
                 ref='code'
                 value={this.state.params.code}
+                onChange={this.handleChange('code')}
                 type='select'
                 label='Resource Code'
-                onChange={this.handleChange('code')}
               >
-                <option value='OPEC/ORB'>OPEC/ORB</option>
-                <option value='BAVERAGE/ANX_HKUSD'>BAVERAGE/ANX_HKUSD</option>
+                {wsj.map(item => <option value={item.value}>{item.label}</option>)}
               </Input>
               <Button onClick={this.saveChanges}>Save</Button>
             </form>
@@ -94,3 +96,37 @@ class EditModal extends React.Component {
 }
 
 export default EditModal
+
+              // <Input
+              //   ref='rows'
+              //   value={this.state.params.rows}
+              //   bsStyle={(this.state.params.rows > 1) ?
+              //     '' : 'error'
+              //   }
+              //   type='number'
+              //   label='Rows'
+              //   onChange={this.handleChange('rows')}
+              // />
+
+              // <Input wrapperClassName='wrapper'>
+              //   <Row>
+              //     <Col xs={6}>
+              //       <Input
+              //         ref='from'
+              //         value={this.state.params.from}
+              //         onChange={this.handleChange('from')}
+              //         label='From'
+              //         type='date'
+              //       />
+              //     </Col>
+              //     <Col xs={6}>
+              //       <Input
+              //         ref='till'
+              //         value={this.state.params.till}
+              //         onChange={this.handleChange('till')}
+              //         label='Till'
+              //         type='date'
+              //       />
+              //     </Col>
+              //   </Row>
+              // </Input>

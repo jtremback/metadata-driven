@@ -3,18 +3,22 @@ import _ from 'lodash'
 import Chartist from 'react-chartist'
 import 'whatwg-fetch'
 
-function parseQuandlTimeSeries (input) {
-  let output = {
-    labels: [],
-    series: [[]]
-  }
+function count (arrayLength, totalWidth, itemWidth) {
+  return (totalWidth / itemWidth) / arrayLength
+}
 
-  input.forEach(item => {
-    output.labels.unshift(decorateQuandlDate(item[0]))
-    output.series[0].unshift(item[1])
+function cull (fraction, array) {
+  var every = 1 / fraction
+  var counter = every
+
+  return array.map(function (item) {
+    counter = counter + 1
+    if (counter > every) {
+      counter = 0
+      return item
+    }
+    return ' '
   })
-
-  return (output)
 }
 
 function decorateQuandlDate (date) {
@@ -29,6 +33,10 @@ function decorateQuandlDate (date) {
 }
 
 class GraphView extends React.Component {
+  constructor () {
+    super()
+    this.parseQuandlTimeSeries = this.parseQuandlTimeSeries.bind(this)
+  }
 
   componentDidMount () {
     this.fetchData(this.props.params)
@@ -41,19 +49,33 @@ class GraphView extends React.Component {
     }
   }
 
+  parseQuandlTimeSeries (input) {
+    let output = {
+      labels: [],
+      series: [[]]
+    }
+
+    input.forEach(item => {
+      output.labels.unshift(decorateQuandlDate(item[0]))
+      output.series[0].unshift(item[1])
+    })
+
+    return (output)
+  }
+
   fetchData (params) {
     const url = `https://www.quandl.com/api/v1/datasets/${params.code}.json?rows=${params.rows}&auth_token=3XJzrsSsLc8rzfxvwhFM`
     console.log(url)
     fetch(url)
     .then((response) => {
         if (response.status >= 400) {
-            throw new Error(`Bad response from server`)
+          throw new Error(`Bad response from server`)
         }
         return response.json()
     })
     .then((response) => {
       this.setState({
-        data: parseQuandlTimeSeries(response.data),
+        data: this.parseQuandlTimeSeries(response.data),
         yAxisLabel: response.column_names[1],
         xAxisLabel: response.column_names[0],
         chartTitle: response.name
@@ -61,11 +83,25 @@ class GraphView extends React.Component {
     })
   }
 
+  // componentWillUpdate () {
+
+  // }
+
   render () {
     if (this.state) {
+
+      let labels = this.state.data && this.state.data.labels
+      if (labels) {
+        const node = React.findDOMNode(this)
+        if (node) {
+          const totalWidth = node.getBoundingClientRect().width
+          labels = cull(count(labels && labels.length, totalWidth, 42), labels)
+        }
+      }
+
       return (
         <div>
-          <Chartist data={this.state.data} options={{
+          <Chartist data={React.addons.update(this.state.data, { labels: { $set: labels }})} options={{
             fullWidth: true,
             height: this.props.height,
             chartPadding: {
