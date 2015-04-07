@@ -4,6 +4,8 @@ var _ = require('lodash')
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
 import Graph from './Graph.js'
 import Panel from 'react-bootstrap/lib/Panel'
+import Button from 'react-bootstrap/lib/Button'
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 import Glyphicon from 'react-bootstrap/lib/Glyphicon'
 
 const rowHeight = 200
@@ -118,8 +120,10 @@ class GridLayout extends React.Component {
   render () {
     return (
       <div>
-        <button onClick={this.onAddItem}>Add Item</button>
-        <button onClick={this.saveToLocalStorage}>Save to Local Storage</button>
+        <ButtonToolbar>
+          <Button onClick={this.onAddItem}>Add Item</Button>
+          <Button onClick={this.saveToLocalStorage}>Save to Local Storage</Button>
+        </ButtonToolbar>
         <ResponsiveReactGridLayout
           onLayoutChange={this.onLayoutChange}
           onBreakpointChange={this.onBreakpointChange}
